@@ -62,4 +62,4 @@ def network_summary(g):
     print("Powerlaw Alpha:", fit.power_law.alpha)
     print("Clustering coefficient:", nx.transitivity(g))
     print("Average local clustering:", nx.average_clustering(g))
-    print("Mean distance:", nx.average_shortest_path_length(g))
+    #print("Mean distance:", nx.average_shortest_path_length(g))
