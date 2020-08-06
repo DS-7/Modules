@@ -51,15 +51,23 @@ def simulate_labeled_graphs(sz, samples = 120):
 
 def network_summary(g):
     if(g.is_directed()):
+        print("Considering underlying undeirected graph")
         g = g.to_undirected()
     node_count = len(g.nodes())
     print("Nodes:", node_count)
     print("Edges:", g.size())
     print("Mean degree:", np.mean(list(dict(g.degree()).values())))
-    print("Components number:", len(list(nx.connected_components(g))))
-    print("Largest component node percentage:", len(sorted(nx.connected_components(g), key = len, reverse = True)[0]) / node_count)
-    fit = powerlaw.Fit(list(dict(nx.degree(g)).values()), discrete = True)
-    print("Powerlaw Alpha:", fit.power_law.alpha)
-    print("Clustering coefficient:", nx.transitivity(g))
-    print("Average local clustering:", nx.average_clustering(g))
-    #print("Mean distance:", nx.average_shortest_path_length(g))
+    print("Components#:", len(list(nx.connected_components(g))))
+    largest_component = sorted(nx.connected_components(g), key = len, reverse = True)[0]
+    largest_component_subgraph = g.subgraph(largest_component)
+    print("Largest component node percentage:", len(largest_component) / node_count)
+    fit = powerlaw.Fit(list(dict(nx.degree(largest_component_subgraph)).values()), discrete = True)
+    print("Powerlaw Alpha of largest component:", fit.power_law.alpha)
+    print("Clustering coefficient of largest component:", nx.transitivity(largest_component_subgraph))
+    print("Average local clustering of largest component:", nx.average_clustering(largest_component_subgraph))
+    print("Diameter of largest component:", nx.diameter(largest_component_subgraph, usebounds=True))
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    g = nx.barabasi_albert_graph(1000, 5)
+    network_summary(g)
