@@ -32,7 +32,6 @@ def d_graph_out_features(g):
 
 def simulate_labeled_graphs(sz, samples = 120):
     df = pd.DataFrame()
-    power_law_pvalue = []
     for m in np.random.uniform(1, 9, samples):
         m = int(m)
         pam = nx.barabasi_albert_graph(sz, m)
